@@ -18,12 +18,21 @@ Route::get('/',  function () {
     return view('welcome');
 });
 Route::get('/home',  function () {
-    return view('welcome');
+    return view('home');
 });
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
-
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::group(['middleware' => ['admin']], function () {
+        Route::get('admin/give-admin/{userId}', 'UserController@giveAdmin');
+        Route::get('admin/remove-admin/{userId}', 'UserController@removeAdmin');
+        Route::prefix('admin')->group(function () {
+            Route::resource('users', 'UserController');
+        });
+        Route::get('/admin', function () {
+            return view('admin.index');
+        });
+    });
+});
