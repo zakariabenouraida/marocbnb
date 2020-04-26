@@ -4,6 +4,12 @@
             <div class="navbar-header">
                 <a class="navbar-brand links" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
             </div>
+            @if (Auth::check())
+
+            @if(Auth::user()->hasRole('admin'))
+            <a class="btn btn-primary btn-lg" href="/admin">Admin Dashboard</a>
+            @endif
+            @endif
             <div class=" nav navbar-nav navbar-right">
                 @if (Route::has('login'))
                 <div class=" links">
